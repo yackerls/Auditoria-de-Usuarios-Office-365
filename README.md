@@ -38,7 +38,7 @@ Procesa reportes `.csv` exportados de Microsoft 365 o Azure AD y cruza automáti
 
 1.  **Clona el repositorio:**
     ```bash
-    sudo git clone [https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git](https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git)
+    sudo git clone https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git
     cd Auditoria-de-Usuarios-Office-365
     ```
 
@@ -91,3 +91,15 @@ auditoria-365/
 ├── requirements.txt     # Librerías de Python necesarias
 ├── README.md            # Documentación
 └── data/                # Carpeta local para almacenar reportes
+
+
+
+---
+
+## 📸 Captura de Pantalla
+
+Así se ve el dashboard interactivo una vez cargado un reporte:
+
+![Dashboard de Auditoría](assets/screenshot.png)
+
+---
