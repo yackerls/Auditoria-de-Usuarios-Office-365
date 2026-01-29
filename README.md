@@ -15,7 +15,6 @@ Procesa reportes `.csv` exportados de Microsoft 365 o Azure AD y cruza automáti
 ---
 
 ## ✨ Características Principales
-
 * 🔒 **Privacidad Total:** Ejecución 100% local o en servidor propio (Docker); los datos sensibles nunca salen de tu infraestructura.
 * 📂 **Análisis Rápido:** Interfaz "Drag & Drop" para cargar reportes CSV manualmente.
 * 📊 **Dashboard Interactivo:** Visualiza el desperdicio por tipo de licencia (E3, Business Standard, Power BI, etc.).
@@ -93,7 +92,7 @@ auditoria-365/
 └── data/                # Carpeta local para almacenar reportes
 
 
-
+##
 ---
 
 ## 📸 Captura de Pantalla
