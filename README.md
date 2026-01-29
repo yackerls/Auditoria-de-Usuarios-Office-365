@@ -92,7 +92,8 @@ auditoria-365/
 └── data/                # Carpeta local para almacenar reportes
 
 
-##
+```
+
 ---
 
 ## 📸 Captura de Pantalla
