@@ -98,8 +98,8 @@ auditoria-365/
 
 ## 📸 Captura de Pantalla
 
-Así se ve el dashboard interactivo una vez cargado un reporte:
+Así se ve el dashboard interactivo:
 
-![Dashboard de Auditoría](assets/screenshot.png)
+![Dashboard de Auditoría](captura.png)
 
 ---
