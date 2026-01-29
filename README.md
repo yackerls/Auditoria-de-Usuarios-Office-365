@@ -38,14 +38,16 @@ Procesa reportes `.csv` exportados de Microsoft 365 o Azure AD y cruza automáti
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone [https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git](https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git)
+    sudo git clone [https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git](https://github.com/yackerls/Auditoria-de-Usuarios-Office-365.git)
     cd Auditoria-de-Usuarios-Office-365
     ```
 
 2.  **Levanta el contenedor:**
+    *(Nota: Usamos el comando moderno `docker compose` con espacio)*
     ```bash
-    docker-compose up -d --build
+    sudo docker compose up -d --build
     ```
+    *Si tu versión de Docker es antigua y falla el comando anterior, intenta con `sudo docker-compose up -d --build`.*
 
 3.  **Accede a la herramienta:**
     Abre tu navegador y ve a `http://localhost:8501`.
