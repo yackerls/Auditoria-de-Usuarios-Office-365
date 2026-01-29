@@ -1,0 +1,11 @@
+version: '3'
+services:
+  auditoria-365:
+    build: .
+    container_name: auditoria_licencias_manual
+    ports:
+      - "8501:8501"
+    volumes:
+      # Persistencia: los archivos subidos quedan guardados en la carpeta ./data
+      - ./data:/app/data
+    restart: unless-stopped
