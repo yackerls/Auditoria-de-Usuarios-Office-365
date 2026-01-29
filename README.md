@@ -100,6 +100,6 @@ auditoria-365/
 
 Así se ve el dashboard interactivo:
 
-![Dashboard de Auditoría](assets/screenshot.png)
+![Dashboard de Auditoría](screenshot.png)
 
 ---
