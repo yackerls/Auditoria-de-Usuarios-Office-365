@@ -1,65 +1,42 @@
 import streamlit as st
 import pandas as pd
-import os
-import glob
 
-# Configuración: Layout "wide" para aprovechar el ancho, pero diseño compacto
+# Configuración: Layout "wide"
 st.set_page_config(page_title="Auditoría de Licencias", layout="wide")
 
 # --- Encabezado y Carga de Archivos ---
 col1, col2 = st.columns([2, 1.5])
 with col1:
     st.title("🔒 Reporte de Usuarios Bloqueados")
+    st.caption("Modo Privacidad: Los datos se procesan en memoria y no se guardan.")
 
 with col2:
     uploaded_file = st.file_uploader(
-        "📂 Cargar o actualizar reporte",
+        "📂 Cargar reporte (.csv)",
         type=["csv"],
-        help="Sube un archivo .csv para analizar o actualizar el reporte."
+        help="Sube un archivo para analizarlo al instante. No se guardará copia en el servidor."
     )
 st.divider()
 
-# --- LÓGICA DE CARGA DE DATOS ---
+# --- LÓGICA DE CARGA (SOLO MEMORIA) ---
 
 df = None
 source_message = ""
 
 if uploaded_file is not None:
-    # Si se sube un archivo, se guarda en la carpeta 'data' y se procesa
     try:
-        DATA_FOLDER = './data'
-        if not os.path.exists(DATA_FOLDER):
-            os.makedirs(DATA_FOLDER)
+        # LEER DIRECTAMENTE DESDE LA SUBIDA (Sin guardar en disco)
+        df = pd.read_csv(uploaded_file)
+        source_message = f"✅ Analizando archivo temporal: **{uploaded_file.name}**"
         
-        save_path = os.path.join(DATA_FOLDER, uploaded_file.name)
-        
-        # Guardar el contenido del archivo subido en el servidor
-        with open(save_path, "wb") as f:
-            f.write(uploaded_file.getbuffer())
-
-        # Leer el dataframe desde el archivo recién guardado
-        df = pd.read_csv(save_path)
-        source_message = f"Se guardó y ahora se muestran los datos de: **{uploaded_file.name}**"
-        st.success(f"Archivo '{uploaded_file.name}' guardado en el servidor.")
-
     except Exception as e:
-        st.error(f"Error al guardar o procesar el archivo: {e}")
+        st.error(f"Error al procesar el archivo: {e}")
 else:
-    # Si no, busca el último archivo en la carpeta 'data'
-    DATA_FOLDER = './data'
-    list_of_files = glob.glob(os.path.join(DATA_FOLDER, '*.csv'))
-
-    if list_of_files:
-        latest_file = max(list_of_files, key=os.path.getctime)
-        try:
-            df = pd.read_csv(latest_file)
-            source_message = f"Mostrando datos del archivo local: **{os.path.basename(latest_file)}**"
-        except Exception as e:
-            st.error(f"Error al leer el archivo local: {e}")
+    st.info("👈 Sube un archivo CSV en el panel de arriba para ver el reporte.")
 
 # --- INICIO DE LA APP PRINCIPAL ---
 if df is not None:
-    st.markdown(source_message) # Muestra de dónde vienen los datos
+    st.success(source_message)
     try:
         if 'Block credential' in df.columns and 'Licenses' in df.columns:
             
@@ -90,11 +67,11 @@ if df is not None:
             st.markdown("### 📉 Resumen de Desperdicio")
             st.caption("Haz clic en 'Ver' para filtrar la lista de abajo.")
             
-            # Initialize session state for filter
+            # Estado de la sesión para filtros
             if 'licencia_seleccionada' not in st.session_state:
                 st.session_state.licencia_seleccionada = None
 
-            # Custom table with buttons
+            # Tabla personalizada con botones
             header_cols = st.columns([3, 1, 1])
             header_cols[0].markdown("**Tipo de Licencia**")
             header_cols[1].markdown("**Cantidad Bloqueada**")
@@ -118,7 +95,6 @@ if df is not None:
             df_filtrado = df_bloqueados
             mensaje_filtro = "Mostrando: Todos los usuarios bloqueados"
             
-            # Detectar si hay una licencia seleccionada en el estado de la sesión
             if st.session_state.licencia_seleccionada:
                 licencia_seleccionada = st.session_state.licencia_seleccionada
                 
@@ -126,10 +102,9 @@ if df is not None:
                 df_filtrado = df_bloqueados[df_bloqueados['Licenses'].str.contains(licencia_seleccionada, regex=False)]
                 mensaje_filtro = f"Filtro Activo: Usuarios con {licencia_seleccionada}"
                 
-                # Botón para borrar filtro (solo aparece si hay filtro)
                 if st.button("❌ Quitar Filtro"):
                     st.session_state.licencia_seleccionada = None
-                    st.rerun() # Esto recargará la página limpia
+                    st.rerun()
 
             # --- PARTE 3: INVENTARIO DETALLADO ---
             
@@ -169,6 +144,3 @@ if df is not None:
 
     except Exception as e:
         st.error(f"Ocurrió un error al procesar los datos: {e}")
-else:
-    st.info("Para comenzar, carga un reporte usando el panel de arriba o asegúrate de que haya un archivo .csv en la carpeta 'data' del servidor.")
-
