@@ -110,9 +110,10 @@ if df is not None:
             
             col_header, col_count = st.columns([8, 2])
             col_header.subheader("📋 Inventario Detallado")
-            col_count.metric("Usuarios en lista", len(df_filtrado))
             
             st.info(mensaje_filtro)
+
+            search_query = st.text_input("🔍 Buscar en la tabla:", placeholder="Escribe un nombre, correo, puesto, etc.")
 
             # Mapeo de columnas
             cols_map = {
@@ -130,6 +131,17 @@ if df is not None:
             
             if cols_existentes:
                 df_final = df_filtrado[cols_existentes].rename(columns=cols_map)
+
+                # Lógica de búsqueda
+                if search_query:
+                    # Crear una máscara booleana con False por defecto
+                    mask = pd.Series([False] * len(df_final))
+                    # Iterar sobre las columnas de df_final para buscar el texto
+                    for col in df_final.columns:
+                        mask = mask | df_final[col].astype(str).str.contains(search_query, case=False, na=False)
+                    df_final = df_final[mask]
+
+                col_count.metric("Usuarios en lista", len(df_final))
                 
                 st.dataframe(
                     df_final,
